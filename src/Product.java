@@ -20,4 +20,9 @@ public class Product implements TimerListener {
 
         }
     }
+
+    @Override
+    public void onEvent(EventType eventType) {
+
+    }
 }

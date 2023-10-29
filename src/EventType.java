@@ -1,4 +1,4 @@
-public enum Events {
+public enum EventType {
     MovingProductsToTradingFloor,
     ProductWasExpire,
     ProductWithdrawn,

@@ -1,4 +1,4 @@
 // Observable
-public interface TimerListener {
+public interface TimerListener extends EventListener {
     void dataChanged(int newDay);
 }
