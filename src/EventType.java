@@ -1,6 +1,10 @@
 public enum EventType {
+    SupermarketOpening,
+    SupermarketClosing,
+    DeliveringProductsToWarehouse,
     MovingProductsToTradingFloor,
+    ProductWillExpireSoon,
     ProductWasExpire,
-    ProductWithdrawn,
-    ProductSold
+    ProductSold,
+    ProductPurchased
 }

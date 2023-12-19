@@ -1,3 +1,6 @@
+import java.time.LocalTime;
+import java.util.Random;
+
 public enum ProductType {
     Bakery,
     Meat,
@@ -5,5 +8,9 @@ public enum ProductType {
     VegetableFruits,
     HouseholdChemicals,
     Grocery, // Бакалея
-    Alcoholic
+    Alcoholic;
+
+    public static ProductType getRandom() {
+        return values()[new Random(LocalTime.now().getNano()).nextInt(values().length)];
+    }
 }
