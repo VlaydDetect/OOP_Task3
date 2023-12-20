@@ -1,14 +1,14 @@
-import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
 // Singleton
-public class Supermarket extends Timer {
+public class Supermarket extends Observer {
     private static class Warehouse {
         private static Warehouse instance;
 
-        private List<Product> products = new ArrayList<>();
+        private final List<Product> products = new ArrayList<>();
 
         public static Warehouse getInstance() {
             if (instance == null) {
@@ -22,7 +22,7 @@ public class Supermarket extends Timer {
     private static class TradingFloor {
         private static TradingFloor instance;
 
-        private List<Product> products = new ArrayList<>();
+        private final List<Product> products = new ArrayList<>();
 
         public static TradingFloor getInstance() {
             if (instance == null) {
@@ -34,12 +34,10 @@ public class Supermarket extends Timer {
     }
 
     private static Supermarket instance;
-    private List<Consumer> consumers = new ArrayList<>();
+    private static List<Consumer> consumers = new ArrayList<>();
 
-    private Supermarket() {}
-
-    public void init(int workDays, int workHours, int stepDelay, int hoursStep) {
-        super.init(workDays, workHours, stepDelay, hoursStep);
+    private Supermarket() {
+        queue = new LinkedList<>();
     }
 
     public static Supermarket getInstance() {
@@ -50,8 +48,16 @@ public class Supermarket extends Timer {
         return instance;
     }
 
+    public LinkedList<EventType> getQueue() {
+        return queue;
+    }
+
     public List<Product> getWarehouseProducts() {
         return Warehouse.getInstance().products;
+    }
+
+    public List<Product> getTradingFloorProducts() {
+        return TradingFloor.getInstance().products;
     }
 
     public void addProductToTradingFloor(Product product) {
@@ -61,29 +67,42 @@ public class Supermarket extends Timer {
 
     public static void deliveryProductsToWarehouse(List<Product> products) {
         Warehouse.getInstance().products.addAll(products);
-        System.out.println("deliveryProductsToWarehouse!");
+        System.out.println("Delivery products to Warehouse!");
     }
 
     public void spawnConsumers() {
-        int rand = new Random(LocalTime.now().getNano()).nextInt(0, 100);
+        int rand = new Random(System.nanoTime()).nextInt(0, 100);
         for (int i = 0; i < rand; i++) {
             List<ProductType> preferences = new ArrayList<>();
-            int randPreferences = new Random(LocalTime.now().getNano()).nextInt(1, 10);
+            int randPreferences = new Random(System.nanoTime()).nextInt(1, 10);
             for (int j = 0; j < randPreferences; j++) {
                 preferences.add(ProductType.getRandom());
             }
 
-            float cache = new Random(LocalTime.now().getNano()).nextFloat(100.0f, 5000.0f);
-            this.consumers.add(new Consumer(String.format("Consumer %d", i), cache, preferences));
+            float cache = new Random(System.nanoTime()).nextFloat(100.0f, 5000.0f);
+            consumers.add(new Consumer(String.format("Consumer %d", i), cache, preferences));
         }
     }
 
     public void consumersDisperse() {
-        this.consumers = new ArrayList<>();
+        consumers = new ArrayList<>();
+    }
+
+    public Product getRandomProduct() {
+        List<Product> products = TradingFloor.getInstance().products;
+        return products.get(new Random(System.nanoTime()).nextInt(products.size()));
+    }
+
+    public Consumer getRandomConsumer() {
+        return consumers.get(new Random(System.nanoTime()).nextInt(consumers.size()));
     }
 
     public static void liquidateProduct(Product product) {
         TradingFloor.getInstance().products.remove(product);
-        System.out.printf("Product %s was liquidated", product.getName());
+    }
+
+    public static void consumerHasLeft(Consumer consumer) {
+        System.out.printf("%s has left\n", consumer);
+        consumers.remove(consumer);
     }
 }

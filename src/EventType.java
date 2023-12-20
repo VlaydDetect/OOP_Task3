@@ -1,3 +1,6 @@
+import java.time.LocalTime;
+import java.util.Random;
+
 public enum EventType {
     SupermarketOpening,
     SupermarketClosing,
@@ -5,6 +8,11 @@ public enum EventType {
     MovingProductsToTradingFloor,
     ProductWillExpireSoon,
     ProductWasExpire,
-    ProductSold,
-    ProductPurchased
+    ConsumerLookingForTheProduct,
+    ProductSold;
+
+    public static EventType getRandom() {
+        EventType[] vals = {ProductWillExpireSoon, ProductWasExpire, ConsumerLookingForTheProduct};
+        return vals[new Random(System.nanoTime()).nextInt(vals.length)];
+    }
 }

@@ -11,6 +11,6 @@ public enum ProductType {
     Alcoholic;
 
     public static ProductType getRandom() {
-        return values()[new Random(LocalTime.now().getNano()).nextInt(values().length)];
+        return values()[new Random(System.nanoTime()).nextInt(values().length)];
     }
 }
